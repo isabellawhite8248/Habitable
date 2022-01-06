@@ -24,99 +24,99 @@ public class Daily {
 
                 case 0:
                     this.setDailyTask("1:00am", "task", row*18);
-                break;
+                    break;
 
                 case 1:
                     this.setDailyTask("2:00am", "task", row*18);
-                break;
+                    break;
 
                 case 2:
                     this.setDailyTask("3:00am", "task", row*18);
-                break;
+                    break;
 
                 case 3:
                     this.setDailyTask("4:00am", "task", row*18);
-                break;
+                    break;
 
                 case 4:
                     this.setDailyTask("5:00am", "task", row*18);
-                break;
+                    break;
 
                 case 5:
                     this.setDailyTask("6:00am", "task", row*18);
-                break;
+                    break;
 
                 case 6:
                     this.setDailyTask("7:00am", "task", row*18);
-                break;
+                    break;
 
                 case 7:
                     this.setDailyTask("8:00am", "task", row*18);
-                break;
+                    break;
 
                 case 8:
                     this.setDailyTask("9:00am", "task", row*18);
-                break;
+                    break;
 
                 case 9:
                     this.setDailyTask("10:00am", "task", row*18);
-                break;
+                    break;
 
                 case 10:
                     this.setDailyTask("11:00am", "task", row*18);
-                break;
+                    break;
 
                 case 11:
                     this.setDailyTask("12:00am", "task", row*18);
-                break;
+                    break;
 
                 case 12:
                     this.setDailyTask("1:00pm", "task", row*18);
-                break;
+                    break;
 
                 case 13:
                     this.setDailyTask("2:00pm", "task", row*18);
-                break;
+                    break;
 
                 case 14:
                     this.setDailyTask("3:00pm", "task", row*18);
-                break;
+                    break;
 
                 case 15:
                     this.setDailyTask("4:00pm", "task", row*18);
-                break;
+                    break;
 
                 case 16:
                     this.setDailyTask("5:00pm", "task", row*18);
-                break;
+                    break;
 
                 case 17:
                     this.setDailyTask("6:00pm", "task", row*18);
-                break;
+                    break;
 
                 case 18:
                     this.setDailyTask("7:00pm", "task", row*18);
-                break;
+                    break;
 
                 case 19:
                     this.setDailyTask("8:00pm", "task", row*18);
-                break;
+                    break;
 
                 case 20:
                     this.setDailyTask("9:00pm", "task", row*18);
-                break;
+                    break;
 
                 case 21:
                     this.setDailyTask("10:00pm", "task", row*18);
-                break;
+                    break;
 
                 case 22:
                     this.setDailyTask("11:00pm", "task", row*18);
-                break;
+                    break;
 
                 case 23:
                     this.setDailyTask("12:00pm", "task", row*18);
-                break;
+                    break;
 
             }
         }
@@ -125,6 +125,7 @@ public class Daily {
     public void setDailyTask(String time, String dailyTask, int y){
         //TODO: set label parameters like width and height to make sure it doesn't go off the screen
         //TODO: make the user able to edit the labels
+
         Label label = new Label(time + ":" + dailyTask);
         label.setTextFill(Color.WHITE);
         label.setLayoutY(y);
@@ -132,8 +133,3 @@ public class Daily {
     }
 
 }
-
-//    setLayout(new GridLayout(3, 1));
-//        add(new Checkbox("one", null, true));
-//        add(new Checkbox("two"));
-//        add(new Checkbox("three"));
