@@ -14,18 +14,18 @@ public class App extends Application{
         Scene scene = new Scene(organizer.getRoot(), Constants.APP_WIDTH,
                 Constants.APP_HEIGHT);
         stage.setScene(scene);
-        stage.setTitle("Schedule");
+        stage.setTitle(Constants.APP_TITLE);
         stage.show();
 
 
     }
 }
-
-//TODO: make it so it changes the numbers and days starting of the month with the flipping of pages and that it retains the circles
+//TODO: save circles - maybe build a wrapper class for the circles?
+//TODO: change the numbers each flip of the month - maybe save-able interface, then you can flip between save-ables?
 //TODO: make the text editable from habits and daily
 //TODO: be able to save the information - look into saving and loading
-//info to save: dots, text entered in daily and habits, don't think checked boxes need to be preserved
 //TODO: look for repeated code and try to condense
-//TODO: look into using enums
+//TODO: look into using enums, lots of strings no storage
 //TODO: go through the rest of the to dos throughout the code and do them if they're still relevant
-//TODO: comments and read me
+//TODO: make it adjustible to the year, right now only works for the year 2022, make it so that you can enter when the year
+//starts and whether its a leap year and it will automatically generate the new calendar, more extensible version

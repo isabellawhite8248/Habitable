@@ -4,13 +4,16 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
 import java.util.ArrayList;
+
+/*
+PaneOrganizer organizes the three main sections of the app and deals with interactions between the calendar and habit circles
+ */
 
 //TODO: need to be able to save and load the images from before
 // - the habits, the text from the daily pane, the marked circles on the calendar and each of the 12 panes, the month the calendar was flipped to
-
 
 public class PaneOrganizer {
 
@@ -21,7 +24,7 @@ public class PaneOrganizer {
     private Daily daily;
 //    private ArrayList<Circle> circlz;
     private String selectedMonth;
-    private ArrayList<StoreIt> storage;
+//    private StoreIt[] storage;
 
     private String[] months;
     private Calendar[] monthPages;
@@ -32,8 +35,8 @@ public class PaneOrganizer {
     //TODO: make forawrd back and clear for the dailyPane and the CalendarPane
     public PaneOrganizer(){
 
-        this.storage = new ArrayList<>();
-        this.selectedMonth = "January";
+//        this.storage = new StoreIt[Constants.NUM_MONTHS];
+        this.selectedMonth = Constants.MONTH_0;
         this.root = new BorderPane();
 
         Pane DailyPane = new Pane();
@@ -41,28 +44,28 @@ public class PaneOrganizer {
         CalendarPane = new Pane();
 
         this.calendarIndex = 0; //current calendar pane program is flipped to, default is Jan
-        this.monthPages = new Calendar[12];
-        this.months = new String[12];
+        this.monthPages = new Calendar[Constants.NUM_MONTHS];
+        this.months = new String[Constants.NUM_MONTHS];
 
-        this.months[0] = "January";
-        this.months[1] = "Febuary";
-        this.months[2] = "March";
-        this.months[3] = "April";
-        this.months[4] = "May";
-        this.months[5] = "June";
-        this.months[6] = "July";
-        this.months[7] = "August";
-        this.months[8] = "September";
-        this.months[9] = "October";
-        this.months[10] = "November";
-        this.months[11] = "December";
+        this.months[0] = Constants.MONTH_0;
+        this.months[1] = Constants.MONTH_1;
+        this.months[2] = Constants.MONTH_2;
+        this.months[3] = Constants.MONTH_3;
+        this.months[4] = Constants.MONTH_4;
+        this.months[5] = Constants.MONTH_5;
+        this.months[6] = Constants.MONTH_6;
+        this.months[7] = Constants.MONTH_7;
+        this.months[8] = Constants.MONTH_8;
+        this.months[9] = Constants.MONTH_9;
+        this.months[10] = Constants.MONTH_10;
+        this.months[11] = Constants.MONTH_11;
 
-        for(int i = 0; i < this.monthPages.length; i++){
-            Pane pane = new Pane();
-            this.monthPages[i] = new Calendar(pane, this.months[i]);
-        }
+//        for(int i = 0; i < this.monthPages.length; i++){
+//            Pane pane = new Pane();
+//            this.monthPages[i] = new Calendar(pane, this.months[i]);
+//        }
 
-        this.calendar = new Calendar(CalendarPane, "January");
+        this.calendar = new Calendar(CalendarPane, Constants.MONTH_0);
         this.habit = new Habits(HabitsPane, this.calendar);
         this.daily = new Daily(DailyPane);
 
@@ -83,11 +86,13 @@ public class PaneOrganizer {
 
     }
 
+    //method which sets up the pane
     public void setUpPane(Pane pane, String backgroundColor,Double width, Double height){
         pane.setStyle("-fx-background-color:" + backgroundColor + ";");
         pane.setPrefSize(width, height);
     }
 
+    //sets up the quit button
     public void setUpButtonPane(){
         javafx.scene.control.Button quitButton = new Button("QUIT");
         quitButton.setOnAction((ActionEvent e) -> System.exit(0));
@@ -95,43 +100,49 @@ public class PaneOrganizer {
         this.buttonPane.getChildren().add(quitButton);
     }
 
-
+    //gets the root, a borderpane which all the other panes are added to
     public BorderPane getRoot(){
         return this.root;
     }
 
+    //forward button set to the flip forward method, called when pressed
     public void setFlipForwardButton(){
         calendar.getForwards().setOnAction((ActionEvent e) -> forward());
         calendar.getForwards().setFocusTraversable(false);
     }
 
+    //back button set to the flip forward method, called when pressed
     public void setFlipBackButton(){
         calendar.getBackwards().setOnAction((ActionEvent e) -> back());
         calendar.getBackwards().setFocusTraversable(false);
     }
 
+    //foward method, flips the calendar forward by switching the title
     public void forward(){
-        this.saveCircles();
-        System.out.println("forwards");
-        if(this.calendarIndex < 11){
 
+        //saves the circle
+//        this.saveCircles();
+
+        //sets the title according to the calendar index
+        if(this.calendarIndex < 11){
             this.calendar.setTitle(this.months[this.calendarIndex + 1]);
             this.selectedMonth = this.months[this.calendarIndex + 1];
             this.calendarIndex = calendarIndex + 1;
-
-        } else {
-
+        } else { //edge case is the month of December where it needs to flip to Jan
             this.calendar.setTitle(this.months[0]);
             this.selectedMonth = this.months[0];
             this.calendarIndex = 0;
-            System.out.println("end of the year, looping back to the start");
-
         }
 
+        //clears the circles and the grid in preparation for a new month
+//        if(this.storage[this.calendarIndex] == null) {
+//            habit.clearChecks();
+//            calendar.clearGrid();
+//        } else {
+//            this.redrawCircles();
+//        }
 
-        habit.clearChecks();
-        calendar.clearGrid();
-
+        //TODO: finish writing the forward method
         //figure out how to store the previous circles, loop through circle array and save location as points in an array list and colors too, then redraw, may need to make a circle wrapper class for this, then the array of panes is not needed, should delete afterwards
         //need to put an if statement in calendar that switches the number labels around depending on when the day starts
         //make it more editable to determine when the starting day is
@@ -139,15 +150,15 @@ public class PaneOrganizer {
 
     public void back(){
 
-        this.saveCircles();
+        //saves the circle
+//        this.saveCircles();
 
-        System.out.println("back");
-
+        //sets the title according to the calendar index
         if(this.calendarIndex > 0){
             this.calendar.setTitle(this.months[this.calendarIndex - 1]);
             this.selectedMonth = this.months[this.calendarIndex - 1];
             this.calendarIndex = calendarIndex - 1;
-
+        //edge case is Jan, which it needs to flip back to December
         } else {
             this.calendar.setTitle(this.months[11]);
             this.selectedMonth = this.months[11];
@@ -155,43 +166,44 @@ public class PaneOrganizer {
             System.out.println("start of the year, looping back to the end");
         }
 
-        habit.clearChecks();
-        calendar.clearGrid();
-        //if there is a saved storeIt for that month redraw the circles, else, clear checks and clear the grid
+//        clears the circles and the grid in preparation for a new month
+//        if(this.storage[this.calendarIndex] == null) {
+//            habit.clearChecks();
+//            calendar.clearGrid();
+//        } else {
+//            this.redrawCircles();
+//        }
+//        if there is a saved storeIt for that month redraw the circles, else, clear checks and clear the grid
 
     }
 
 
-    public void saveCircles(){
+    //method which saves all the circles on the board in a new instance of store it
+//    public void saveCircles(){
+//        StoreIt store = new StoreIt(this.selectedMonth, calendar.getDaSquares()); //store it takes in the selectedMonth to label which month it's storing
+//        for(int i = 0; i < calendar.getDaSquares().length; i++){
+//            Circle[] circles = this.calendar.getDaSquares()[i].getCircles();
+//            store.addCircle(circles); //loops through the circle array and stores it in the arraylist in the corresponding StoreIt instance
+//            storage[this.calendarIndex] = store; //stores the store it in the store it array
+//        }
+//    }
 
-        for(int i = 0; i < calendar.getDaSquares().length; i++){
-
-            Circle[] circles = this.calendar.getDaSquares()[i].getCircles();
-
-//            for(int j = 0; j < circles.length; j++){
-                StoreIt store = new StoreIt(this.selectedMonth);
-                store.addCircle(circles);
-
-                //get month index, this will be the index of storage
-                for (int k = 0; k < this.months.length; k++){
-                    if(this.months[k] == this.selectedMonth){
-                        storage.add(store); //store the storeIt in the storeIt array
-                    }
-                }
+//    public void redrawCircles(){
+////        this.calendar.takeOffCircles(); //removes all circles from the calendar pane
+//        for(int i = 0; i < storage.length; i++){
+//            if(this.storage[i] != null && i == this.calendarIndex){ //if the storage index in the array has a store it saved, and it is of the same month...
+//                //add the circles from the store it to the pane
+//                this.storage[i].color();
+////                for(int f = 0; f < this.storage[i].getAllCircles().size(); f++){
+////                    Circle circle = this.storage[i].getAllCircles().get(f);
+////                    System.out.println(circle);
+////                    circle.setFill(Color.BLACK);
+//////                    CalendarPane.getChildren().add(circle);
+////                }
 //            }
-
-        }
-
-    }
-
-    public void redrawCircles(){
-        //if the month you flipped to and it's corresponding StoreIt is not null in the index of the arraylist...
-        //remove all circles from the pane, make a method to do this
-        //loop through the circles arraylist in the store it and add them to the pane, make a method in the calendar class that takes in the arraylist of circles, then call it here
-        for(int i = 0; i < storage.size(); i++){
-
-        }
-    }
+//        }
+//
+//    }
+}
 
 
-    }

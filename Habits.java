@@ -11,16 +11,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+/*
+this class sets up the habit pane and stores instances of type habit in it, it also contains the check boxes
+and the colors of the habits alongside the strings that tell which habit is which.
+ */
+
 public class Habits {
 
-    //TODO: eliminate constants and input a method make it more changeable in the future
     private Timeline timeline;
     private Pane HabitsPane;
     private Rectangle habitsRect;
     private double prevWidth; //TODO: this can probally be eliminated as an instance variable
     private Color habitColor;
     private Boolean isClearing;
-
 
     private CheckBox[] checkedBoxes;
     private Habit[] habitsArray;
@@ -44,50 +47,45 @@ public class Habits {
     private String habitMessage;
 
     private Calendar calendar;
-//    to the right of that a 200 wide column for habits list, should have color circles column, make a 2x2 grid
 
     public Habits(Pane HabitsPane, Calendar calendar){
 
         this.calendar = calendar;
-
         this.isClearing = false;
         this.habitsRect = null; //placeholder for creating the habits grid
         this.prevWidth = 110;
         this.habitColor = Color.WHITESMOKE;
-        this.habitMessage = "no habit inputed";
+        this.habitMessage = Constants.HABIT_MESSAGE_DEFAULT;
 
+        //timeline needed to detect when the boxes are checked
         this.setUpTimeline();
 
+        //initial settings
         this.currentCheckedBox = null;
         this.currentHabit = null;
 
-        this.checkedBoxes = new CheckBox[8];
-        this.habitsArray = new Habit[8];
+        this.checkedBoxes = new CheckBox[Constants.NUM_HABITS];
+        this.habitsArray = new Habit[Constants.NUM_HABITS];
 
-        this.h0 = new Habit(Color.RED, false,"Brush your teeth");
-        this.h1 = new Habit(Color.ORANGE, false, "study cs");
-        this.h2 = new Habit(Color.YELLOW, false, "eat healthy");
-        this.h3 = new Habit(Color.LIME, false, "habit 4");
-        this.h4 = new Habit(Color.DARKGREEN, false, "habit 5");
-        this.h5 = new Habit(Color.BLUE, false, "habit 6");
-        this.h6 = new Habit(Color.BLUEVIOLET, false, "habit 7");
-        this.h7 = new Habit(Color.BLACK, false, "habit 8");
-
-//with or without you U2
+        //creates each of the 8 habits
+        this.h0 = new Habit(Color.RED, false,Constants.HABIT_0);
+        this.h1 = new Habit(Color.ORANGE, false, Constants.HABIT_1);
+        this.h2 = new Habit(Color.YELLOW, false, Constants.HABIT_2);
+        this.h3 = new Habit(Color.LIME, false, Constants.HABIT_3);
+        this.h4 = new Habit(Color.DARKGREEN, false, Constants.HABIT_4);
+        this.h5 = new Habit(Color.BLUE, false, Constants.HABIT_5);
+        this.h6 = new Habit(Color.BLUEVIOLET, false, Constants.HABIT_6);
+        this.h7 = new Habit(Color.BLACK, false, Constants.HABIT_7);
 
         this.HabitsPane = HabitsPane;
-
-//        this.HabitsPane.addEventHandler(MouseEvent.MOUSE_CLICKED, new mouseClickDetector());
-
         this.HabitsPane.getChildren().add(setTitle());
 
-        for(int row = 0; row < 3; row++){ // for 8 potential habits
-            for(int col = 0; col < 8; col++){ //one col for color, the other for text habit, one for frequecey (1x week/month etc)
-                //180 wide rows, 20 tall
+        for(int row = 0; row < 3; row++){ //one row for color, the other for text habit
+            for(int col = 0; col < 8; col++){ // 8 cols for 8 potential habits
                 switch(row){
-                    //col 0 - color, 20x20
                     case (0):
-                        //TODO: you switch on the same variable, col twice, could we combine the switch statements or better yet simplify with an enum?
+
+                        //in the first column create the color columnw
                         switch(col){
                             //TODO: figure out if you can replace this switch statement with an enum
                             case 0:
@@ -123,17 +121,20 @@ public class Habits {
                                 this.currentHabit = h7;
                                 break;
                         }
-                        this.createHRect(row, col, 20, 50, Color.BLACK, this.habitColor);
-                        //TODO: redundant code, eliminate previous set x in method parameter
-                        this.habitsRect.setX(10);
+
+                        //creates a habit rectangle
+                        this.createHRect(row, col, Constants.HABIT_COLOR_RECT_WIDTH, Constants.HABIT_COLOR_RECT_HEIGHT, Color.BLACK, this.habitColor);
+                        this.habitsRect.setX(Constants.HABITS_X1);
                         break;
-                    //col 1 - text, habit 110
+
+                    //in the 2nd column create the habit label rectangles
                     case (1):
-                        this.createHRect(row, col, 160, 50, Color.BLACK, Color.LIGHTGREY);
-                        //TODO: since height and stroke color remain fixed eliminate the parameter and put it as a constant in the method
-                        this.habitsRect.setX(30);
+
+                        this.createHRect(row, col, Constants.HABIT_RECT_WIDTH, Constants.HABIT_RECT_HEIGHT, Color.BLACK, Color.LIGHTGREY);
+                        this.habitsRect.setX(Constants.HABITS_X2);
 
                         switch(col){
+
                             //TODO: figure out if you can replace this switch statement with an enum
                             case 0:
                                 this.habitMessage = this.h0.getHabitLabel();
@@ -160,24 +161,26 @@ public class Habits {
                                 break;
                         }
 
-                        this.setHabit(this.habitMessage, 30, col*50 + 60, col);
+                        this.setHabit(this.habitMessage, Constants.HABITS_X2, col*Constants.COL_STAGGER + Constants.Y_STAGGER, col);
                         this.habitsArray[col] = this.currentHabit;
 
                         break;
 
                     default:
 
+                        //no default case, only two columns needed
                         break;
                 }
-
 
             }
         }
 
+        //add a key handler to the pane
         this.HabitsPane.addEventHandler(KeyEvent.KEY_PRESSED, new KeyHandler());
 
     }
 
+    //sets up a timeline and updates the checklist with the timeline
     public void setUpTimeline() {
         KeyFrame kf = new KeyFrame(Duration.seconds(0.2), (ActionEvent e) -> updateCheckList());
         this.timeline = new Timeline(kf);
@@ -185,78 +188,90 @@ public class Habits {
         timeline.play();
     }
 
+    //update checklist, called at each second long key frame of the timeline
     public void updateCheckList(){
-
         for(int i = 0; i < checkedBoxes.length; i++){
             if(calendar.getSelectedSquare() != null) {
-                if (checkedBoxes[i].isSelected()) {
-                    habitsArray[i].setCheck(true);
-
+                if (checkedBoxes[i].isSelected()) { //if the checkbox is selected...
+                    habitsArray[i].setCheck(true); //update the habits array to reflect that
+                    //switch statement fills in specific circles corresponding to the habits
+                    //setFill command located in the calendar square class updates the fill represented in the int array for storage purposes
                     switch(i+1){
                         case(1):
                             calendar.getDaCircles()[i+1].setFill(Color.RED);
+                            calendar.getSelectedSquare().changeFill(1,i);
                         break;
                         case(2):
                             calendar.getDaCircles()[i+1].setFill(Color.ORANGE);
+                            calendar.getSelectedSquare().changeFill(1,i);
                         break;
                         case(3):
                             calendar.getDaCircles()[i+1].setFill(Color.YELLOW);
+                            calendar.getSelectedSquare().changeFill(1,i);
                         break;
                         case(4):
                             calendar.getDaCircles()[i+1].setFill(Color.LIME);
-                        break;
+                            calendar.getSelectedSquare().changeFill(1,i);
+                            break;
                         case(5):
                             calendar.getDaCircles()[i+1].setFill(Color.DARKGREEN);
-                        break;
+                            calendar.getSelectedSquare().changeFill(1,i);
+                            break;
                         case(6):
                             calendar.getDaCircles()[i+1].setFill(Color.BLUE);
-                        break;
+                            calendar.getSelectedSquare().changeFill(1,i);
+                            break;
                         case(7):
                             calendar.getDaCircles()[i+1].setFill(Color.BLUEVIOLET);
-                        break;
+                            calendar.getSelectedSquare().changeFill(1,i);
+                            break;
                         default:
                             calendar.getDaCircles()[i+1].setFill(Color.BLACK);
-                        break;
+                            calendar.getSelectedSquare().changeFill(1,i);
+                            break;
                     }
 
                 } else {
+
+                    //if the box is not checked then set the setting to false and set the circle fill to invisible
                     habitsArray[i].setCheck(false);
                     calendar.getDaCircles()[i+1].setFill(Constants.INVISIBLE);
+                    calendar.getSelectedSquare().changeFill(0,i);
                 }
             }
         }
 
+        //if the boolean isClearing is true, only during shift pressed, then eliminate the circles from the cell
         if(isClearing){
             this.clearChecks();
-            isClearing = false;
+            isClearing = false; //set isclearing to false again after the checks are cleared
         }
 
     }
 
+    //create the habit rectangle, a cell in the habit grid
     public void createHRect(int row, int col, int width, int height, Color stroke, Color fill){
-
-        this.habitsRect = new Rectangle(row*this.prevWidth + 5, col*height + 60, width, height);
+        this.habitsRect = new Rectangle(row*this.prevWidth + Constants.HABITS_X_OFFSET, col*height + Constants.HABITS_Y_OFFSET, width, height);
         this.habitsRect.setStroke(stroke);
         this.habitsRect.setFill(fill);
         HabitsPane.getChildren().add(habitsRect);
 
     }
 
+    //set the habit by creating the checkbox and adding it to the main pane
     public void setHabit(String habit, int x, int y, int col){
         CheckBox habitLabel = new CheckBox(habit);
         this.currentCheckedBox = habitLabel;
-        //TODO: set max width of the habit label so it doesn't go off screen, set max text too so it doesn't go out of the box
-//        Label habitLabel = new Label(habit);
         habitLabel.setTextFill(Color.BLACK);
-        habitLabel.setLayoutX(x + 5); //5 is the offset maybe make this a static variable later
-        habitLabel.setLayoutY(y + 5);
+        habitLabel.setLayoutX(x + Constants.SETHABIT_OFFSET);
+        habitLabel.setLayoutY(y + Constants.SETHABIT_OFFSET);
         HabitsPane.getChildren().add(habitLabel);
-        //TODO: add checked box to the checked box array, length of 8
         this.checkedBoxes[col] = this.currentCheckedBox;
     }
 
+    //sets the title for the habits list: "Habits"
     public Label setTitle(){
-        Label title = new Label("Habits");
+        Label title = new Label(Constants.HABIT_TITLE);
         title.setLayoutX(10);
         title.setLayoutY(10);
         title.setStyle("-fx-font: italic bold 36px arial;-fx-text-fill: rgba(0,0,0,1.00)");
@@ -266,6 +281,11 @@ public class Habits {
     public void clearChecks(){
         for(int i = 0; i < this.checkedBoxes.length; i++){
             this.checkedBoxes[i].setSelected(false);
+
+            //update the fill array for the checked box accordingly
+            for(int k = 0; k < calendar.getDaCircles().length; k++){
+                calendar.getSelectedSquare().changeFill(0,k);
+            }
         }
     }
 

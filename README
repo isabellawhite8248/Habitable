@@ -1,1 +1,70 @@
-Shift clears the selected cell from all habits
+Habitable
+---------------------------------------------------------------------------------------------------
+    App designed using object oriented programming in java to track the user's habits over time.
+The user can check the box in the habits section of the app and it will display on the selected
+calendar day, overtime, the user will have incentive to keep doing the habit because the habits
+will form a visual change of the same colored dots.
+   Made it as a personal project for myself because I have trouble picking up
+new habits and staying consistent with them.
+
+    Overview:
+    - App: launches the program.
+
+    - PaneOrganizer: organizes the three main panes, CalendarPane, DailyPane and HabitsPane
+    which contain instances of Calendar, Daily and Habits and deals with the interaction
+    between the habits and calendar pane. It also contains a mouseListener to detect where
+    the user clicks which then performs the respective method to select a square and update
+    the calendar.
+
+    - Calendar: calendar class contains a grid of calendar squares and sets up the calendar
+    and is responsible for updating the calendar as it is flipped through in the paneOrganizer.
+    Also contains the flip buttons and responds to user input.
+
+    - CalendarSquare: wrapper class for the javaFX built in class of rectangle which contains a
+    rectangle, date label and the nine different habit squares with their respective colors.
+    many instances are contained within the Calendar class to form the Calender grid.
+
+    - Constants: contains all the constants necessary for program functionality, organized by
+    class and data type.
+
+    - Daily: the 24 hour schedule pane which allows the user to enter what task they want
+    to do at the specified time, consists primarily of an array of 24 rectangles, each repre-
+    senting one hour of the day.
+
+    - grid/StoreIt: these two classes are still being developed, but essentially the product
+    will be one class which stores the information from each grid, that way when you flip to
+    a new one and back to the old one, the circles you had will still be there, the grid won't
+    just be cleared/unsaved.
+
+    - Habit: the habit class stores the information for each of the 9 individual habits, including
+    whether the box by the habit is checked, in which case the CalendarPane will update by filling
+    in its corresponding circle.
+
+    - Habits: the habits pane is a 2D array of rectangles with a title centered at the top and
+    contains 9 instances of Habit which update their corresponding circles on the calendar.
+    This class also contains the keyHandler which detects when the shift key is pressed.
+
+    Current specs:
+    - on the left side contains a pane with a calendar which responds to the forward and backwards
+    buttons which change the page of the calendar to a new month, looping through an array of
+    different months.
+    -the user can click which square to select and it will be outlined in red to show the user
+    which square is selected
+    - when a habit is checked a dot with its corresponding color will appear in the corresponding
+    calendar square.
+    -in the habit pane on the right side, the user can enter his/her habits in the constants class
+    and they will show up by their individual color and corresponding checkbox.
+    -the user can clear a calendar box by pressing the shift key and the habits list will update
+    as well.
+    -the 24 hour schedule pane in the center allows the user to enter the event in each hour
+    in the constants class and the schedule will appear in the center.
+
+    Specs currently working on:
+    -make the user able to pick the corresponding habit color per square
+    -make the circles save each individual month when the calendar is flipped.
+    -make the text enter-able when the program is open, not just adjusting it in the constants
+    class when the program is closed.
+    -make the calendar save-able and loadable to the desktop
+
+    Key inputs:
+    - Shift clears the selected cell from all habits
